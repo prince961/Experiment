@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<InetAddress> activeIPlist = new ArrayList<>();
     String body;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,10 +98,17 @@ public class MainActivity extends AppCompatActivity {
                         String hostName = address.getCanonicalHostName();
                         Log.d(TAG, "testip: " + testIp + "isreachable- " + reachable + ", host-" + hostName);
 
-                        if (reachable)
+                        if (reachable){
                             Log.i(TAG, "Host: " + String.valueOf(hostName) + "(" + String.valueOf(testIp) + ") is reachable!");
                         //activeIPlist.add(address);
-                        Boolean pingfoxIP = checkIfpingFox(address, context);
+                            //Boolean pingfoxIP = null;
+                            Boolean pingfoxIP = checkIfpingFox(address, context);
+                        if (pingfoxIP == true){
+                            Log.i("pingfoxIP",testIp);
+                            return null;
+                        }
+                        }
+
                     }
                 }
             } catch (Throwable t) {
@@ -111,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private Boolean checkIfpingFox(InetAddress address, Context context) {
+            Boolean pingfoxIp = false ;
+
+
 
             try {
                 URL url = new URL("http:/" + address + "/cm?cmnd=power%20toggle");
@@ -120,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(500);
                 conn.setRequestMethod("GET");
+                int responseCode;
+                responseCode = conn.getResponseCode();
                 conn.setDoOutput(true);
                 //conn.setRequestProperty("Content-Type", "application/json");
                 //int responseCode  = conn.getResponseCode();
@@ -130,8 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 //But to read the response of the server, you will have to implement the procedure below
                 writer.flush();
                 Log.i("custom_check", body);
-                int responseCode;
-                responseCode = conn.getResponseCode();
+
                 Log.i("response_code", Integer.toString(responseCode));
 
 
@@ -140,7 +152,8 @@ public class MainActivity extends AppCompatActivity {
                     //InputStream is = conn.getInputStream();
                     StringBuilder sb = new StringBuilder();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    //userLocalStore.SetUserLoggedIn(true);
+                    pingfoxIp = true;
+                    /* userLocalStore.SetUserLoggedIn(true);
 
 
                     String line;
@@ -155,11 +168,12 @@ public class MainActivity extends AppCompatActivity {
 
                     //Just check to the values received in Logcat
                     Log.i("custom_check", "The values received in the store part are as follows:");
-                    //Log.i("user_email", userEmail);
-                    Log.i("response_code", Integer.toString(responseCode));
+                    Log.i("rever", line);
+                    Log.i("response_code", Integer.toString(responseCode));*/
 
 
                 } else {
+                    pingfoxIp = false;
                     //InputStream is = conn.getErrorStream();
                     StringBuilder sb = new StringBuilder();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
@@ -185,16 +199,18 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("custom_check", line);
                     //Log.i("custom_check", errorMessage);
                     Log.i("Response_Code", Integer.toString(responseCode));
+                    return false;
 
                 }
-                return false;
+
 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return false;
+            return pingfoxIp;
+
 
         }
     }
