@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (reachable){
                             Log.i(TAG, "Host: " + String.valueOf(hostName) + "(" + String.valueOf(testIp) + ") is reachable!");
-                        //activeIPlist.add(address);
+                        //activeIPlist.add(address);1
                             //Boolean pingfoxIP = null;
                             Boolean pingfoxIP = checkIfpingFox(address, context);
                         if (pingfoxIP == true){
