@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         //activeIPlist.add(address);1
                             //Boolean pingfoxIP = null;
                             Boolean pingfoxIP = checkIfpingFox(address, context);
+                            Log.i("booleann",pingfoxIP.toString());
                         if (pingfoxIP == true){
                             Log.i("pingfoxIP",testIp);
                             return null;
