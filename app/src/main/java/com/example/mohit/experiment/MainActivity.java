@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             } catch (Throwable t) {
-                Log.e(TAG, "Well that's not good..", t);
+                Log.e(TAG, "Well that's not good....", t);
             }
 
             return null;
